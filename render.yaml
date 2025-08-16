@@ -4,7 +4,11 @@ services:
     plan: free
     envVars:
       - key: GROQ_API_KEY
-        value: gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 🔑 Substitua pela sua chave real
+        # Adicione no painel do Render
+      - key: TWILIO_ACCOUNT_SID
+        # Adicione no painel
+      - key: TWILIO_AUTH_TOKEN
+        # Adicione no painel
       - key: WHATSAPP_NUMERO
         value: 551199887766
       - key: PORT
