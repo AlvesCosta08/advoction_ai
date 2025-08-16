@@ -224,7 +224,7 @@
     </footer>
   </div>
 
-  <!-- ✅ Link do WhatsApp fixo corrigido: SEM espaços -->
+  <!-- ✅ Ícone do WhatsApp fixo corrigido: SEM espaços -->
   <a href="https://wa.me/551199887766?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20gratuita" class="whatsapp-icon" target="_blank">💬</a>
 
   <script>
@@ -232,45 +232,28 @@
     const input = document.getElementById("input");
     const send = document.getElementById("send");
 
-    // Função para rolar o chat para o final
     function scrollToBottom() {
       chat.scrollTop = chat.scrollHeight;
     }
 
-    // Função de envio
     function enviar() {
       const msg = input.value.trim();
       if (!msg) return;
 
-      // Adiciona a mensagem do usuário
       chat.innerHTML += `<p style="margin: 8px 0; color: #000;"><b>Você:</b> ${msg}</p>`;
       scrollToBottom();
 
-      // Chama a API
-      fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pergunta: msg })
-      })
-      .then(r => r.json())
-      .then(d => {
-        chat.innerHTML += `<p style="margin: 8px 0; background: #e3f2fd; padding: 10px; border-radius: 8px;"><b>Dr. Legal:</b> ${d.resposta}</p>`;
+      // Simulação de resposta (substitua pelo fetch real quando o backend estiver no ar)
+      setTimeout(() => {
+        chat.innerHTML += `<p style="margin: 8px 0; background: #e3f2fd; padding: 10px; border-radius: 8px;"><b>Dr. Legal:</b> Obrigado por sua mensagem! Seu caso será analisado. Em breve, um advogado entrará em contato. 📞</p>`;
         scrollToBottom();
-      })
-      .catch(() => {
-        chat.innerHTML += `<p style="color: #d32f2f;">Erro: Não foi possível conectar. <a href="https://wa.me/551199887766" style="color: #1a3a6e;">Fale diretamente no WhatsApp</a>.</p>`;
-        scrollToBottom();
-      });
+      }, 1000);
 
-      // Limpa o input
       input.value = "";
     }
 
-    // Enviar ao clicar no botão ou pressionar Enter
     send.onclick = enviar;
     input.onkeypress = (e) => e.key === "Enter" && enviar();
-
-    // Rolar ao final ao carregar
     scrollToBottom();
   </script>
 </body>
