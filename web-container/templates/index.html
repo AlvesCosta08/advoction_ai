@@ -1,18 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dr. Legal - Seu Assistente Jurídico</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial; max-width: 600px; margin: 40px auto; padding: 20px; }
-    #chat { border: 1px solid #ccc; height: 400px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
-    #input { width: 70%; padding: 10px; }
-    #send { padding: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    #chat {
+      border: 1px solid #ccc;
+      height: 400px;
+      overflow-y: scroll;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: white;
+      border-radius: 8px;
+    }
+    #input {
+      width: 70%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+    }
+    #send {
+      padding: 10px;
+      background: #1a3a6e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #send:hover {
+      background: #2c5290;
+    }
   </style>
 </head>
 <body>
   <h1>💬 Dr. Legal</h1>
-  <div id="chat"></div>
+  <div id="chat">
+    Olá! Sou seu assistente jurídico virtual. Como posso te ajudar?
+  </div>
   <input type="text" id="input" placeholder="Pergunte algo..." />
   <button id="send">Enviar</button>
 
@@ -21,27 +54,29 @@
     const input = document.getElementById("input");
     const send = document.getElementById("send");
 
-    send.onclick = () => enviar();
-    input.onkeypress = (e) => e.key === "Enter" && enviar();
+    function scrollToBottom() {
+      chat.scrollTop = chat.scrollHeight;
+    }
 
     function enviar() {
       const msg = input.value.trim();
       if (!msg) return;
 
+      // Mostra a mensagem do usuário
       chat.innerHTML += `<p><b>Você:</b> ${msg}</p>`;
-      fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pergunta: msg })
-      })
-      .then(r => r.json())
-      .then(d => {
-        chat.innerHTML += `<p><b>Dr. Legal:</b> ${d.resposta}</p>`;
-        chat.scrollTop = chat.scrollHeight;
-      });
-
       input.value = "";
+      scrollToBottom();
+
+      // Simulação de resposta (use real quando o backend estiver pronto)
+      setTimeout(() => {
+        chat.innerHTML += `<p><b>Dr. Legal:</b> Obrigado pela sua pergunta! Em breve, um advogado entrará em contato. Para falar agora, <a href="https://wa.me/551199887766" target="_blank">clique aqui</a>.</p>`;
+        scrollToBottom();
+      }, 1000);
     }
+
+    send.onclick = enviar;
+    input.onkeypress = (e) => e.key === "Enter" && enviar();
+    scrollToBottom();
   </script>
 </body>
 </html>
