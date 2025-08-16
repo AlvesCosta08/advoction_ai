@@ -3,10 +3,10 @@ from flask import Flask, render_template, request, jsonify
 import requests
 import os
 from requests.utils import quote as url_quote
-from dotenv import load_dotenv  # ← Adicionado
+from dotenv import load_dotenv
 
-# Carrega as variáveis de ambiente do .env
-load_dotenv()  # ← Essencial para ler GROQ_API_KEY
+# Carrega variáveis de ambiente (útil para desenvolvimento local)
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # === CONFIGURAÇÕES DO WHATSAPP ===
 WHATSAPP_NUMERO = os.getenv("WHATSAPP_NUMERO", "551199887766")
-WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="  # Sem espaços!
+WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="  # ← SEM ESPAÇOS!
 
 # === PALAVRAS-JURÍDICAS POR ÁREA ===
 PALAVRAS_JURIDICAS = {
@@ -61,7 +61,7 @@ def perguntar(pergunta: str) -> dict | None:
         "Content-Type": "application/json"
     }
     data = {
-        "model": "llama3-8b-8192",  # Certifique-se de que este modelo está disponível
+        "model": "llama3-8b-8192",
         "messages": [{"role": "user", "content": f"""
 Você é o Dr. Legal, um advogado virtual empático.
 Responda com até 2 frases, em linguagem simples.
@@ -75,7 +75,7 @@ Resposta:
     }
 
     try:
-        # ← URL corrigida: sem espaços no final
+        # ← URL corrigida: SEM ESPAÇOS!
         resp = requests.post("https://api.groq.com/openai/v1/chat/completions", json=data, headers=headers, timeout=30)
         resp.raise_for_status()
         resposta = resp.json()["choices"][0]["message"]["content"].strip()
@@ -129,7 +129,7 @@ def chat():
     if any(w in p for w in ["tchau", "obrigado", "valeu"]):
         return jsonify({"resposta": "Fico feliz em ter ajudado! Conte com o Dr. Legal sempre que precisar. Até breve! 👋"})
 
-    # Temas comuns (exemplos rápidos)
+    # Temas comuns
     temas = {
         "divórcio": "Temos especialistas em divórcio rápido, consensual ou litigioso.",
         "trabalho": "Podemos te ajudar com direitos trabalhistas e verbas rescisórias.",

@@ -3,220 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dr. Legal - Seu Assistente Jurídico Virtual</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-      color: #333;
-      line-height: 1.6;
-      padding: 20px;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      color: #1a3a6e;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1.1rem;
-      color: #555;
-    }
-
-    .chat-box {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-      min-height: 300px;
-      max-height: 500px;
-      overflow-y: auto;
-      border: 1px solid #e0e0e0;
-    }
-
-    .message {
-      padding: 12px 16px;
-      margin-bottom: 15px;
-      border-radius: 18px;
-      max-width: 80%;
-      line-height: 1.5;
-    }
-
-    .bot {
-      background-color: #f0f4f8;
-      color: #222;
-      align-self: flex-start;
-      border-bottom-left-radius: 5px;
-      margin-left: 10px;
-    }
-
-    .user {
-      background-color: #1a3a6e;
-      color: white;
-      margin-left: auto;
-      text-align: right;
-      border-bottom-right-radius: 5px;
-      margin-right: 10px;
-    }
-
-    .msg-container {
-      display: flex;
-      margin-bottom: 10px;
-    }
-
-    .msg-container.user-msg {
-      justify-content: flex-end;
-    }
-
-    .msg-container.bot-msg {
-      justify-content: flex-start;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-    }
-
-    #pergunta {
-      flex: 1;
-      padding: 14px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    #pergunta:focus {
-      border-color: #1a3a6e;
-      box-shadow: 0 0 0 2px rgba(26, 58, 110, 0.2);
-    }
-
-    button {
-      background-color: #1a3a6e;
-      color: white;
-      border: none;
-      padding: 14px 20px;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    button:hover {
-      background-color: #132b50;
-    }
-
-    .loading {
-      text-align: center;
-      color: #666;
-      font-style: italic;
-      padding: 10px;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #777;
-      font-size: 0.9rem;
-    }
-
-    .footer a {
-      color: #1a3a6e;
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Dr. Legal - Assistente Jurídico Virtual</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>⚖️ Dr. Legal</h1>
-      <p>Seu assistente jurídico virtual — rápido, gratuito e confidencial</p>
-    </header>
+<body class="bg-blue-50 min-h-screen flex flex-col">
+  <div class="container mx-auto p-6 flex flex-col items-center flex-grow">
+    <h1 class="text-3xl font-bold text-blue-800 mb-4">⚖️ Dr. Legal</h1>
+    <p class="text-gray-600 mb-6 text-center">Seu assistente jurídico virtual — rápido, gratuito e confidencial</p>
 
-    <div class="chat-box" id="chatBox">
+    <div id="chat" class="w-full max-w-lg bg-white rounded-lg shadow p-4 mb-4 h-96 overflow-y-auto border">
       <!-- Mensagem inicial -->
-      <div class="msg-container bot-msg">
-        <div class="message bot">
-          Olá! Aqui é o <b>Dr. Legal</b> 🌟<br><br>
-          Seu direito é importante — e eu estou aqui para te ajudar.<br><br>
-          Posso te orientar sobre:<br>
-          ⚖️ Família | 💼 Trabalho | 🛡️ Consumidor | 🏥 Previdência<br><br>
-          <a href="https://wa.me/551199887766?text=Tenho+uma+dúvida+jurídica+urgente." 
-             style="background:#1a3a6e; color:white; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:bold; display:inline-block; margin-top:10px;">
-             💬 Falar com um advogado agora
-          </a>
+      <div class="flex justify-start mb-2">
+        <div class="bg-gray-100 text-gray-800 p-3 rounded-lg max-w-xs">
+          Olá! Aqui é o <b>Dr. Legal</b>.<br>Como posso te ajudar com seus direitos hoje?
         </div>
       </div>
     </div>
 
-    <div class="input-area">
-      <input type="text" id="pergunta" placeholder="Digite sua dúvida jurídica..." autofocus />
-      <button onclick="enviarPergunta()">Enviar</button>
-    </div>
-
-    <div class="footer">
-      <p>Protegemos sua privacidade. Conversas são seguras e confidenciais. | <a href="https://wa.me/" target="_blank">Tecnologia WhatsApp</a></p>
+    <div class="flex w-full max-w-lg gap-2">
+      <input 
+        type="text" 
+        id="pergunta" 
+        placeholder="Digite sua dúvida jurídica..." 
+        class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        autofocus
+      />
+      <button 
+        onclick="enviar()" 
+        class="bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700">
+        Enviar
+      </button>
     </div>
   </div>
 
   <script>
-    const chatBox = document.getElementById("chatBox");
+    const chat = document.getElementById("chat");
     const input = document.getElementById("pergunta");
 
     function adicionarMensagem(texto, tipo) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `msg-container ${tipo}-msg`;
-
-      const innerDiv = document.createElement("div");
-      innerDiv.className = `message ${tipo}`;
-      innerDiv.innerHTML = texto;
-
-      msgDiv.appendChild(innerDiv);
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
+      const div = document.createElement("div");
+      div.className = tipo === "user" ? "flex justify-end mb-2" : "flex justify-start mb-2";
+      div.innerHTML = `
+        <div class="${tipo === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'} p-3 rounded-lg max-w-xs">
+          ${texto}
+        </div>
+      `;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    function enviarPergunta() {
+    function enviar() {
       const pergunta = input.value.trim();
       if (!pergunta) return;
 
-      // Mostrar pergunta do usuário
       adicionarMensagem(pergunta, "user");
       input.value = "";
 
-      // Mostrar carregamento
-      const loading = document.createElement("div");
-      loading.className = "msg-container bot-msg loading";
-      loading.innerText = "Analisando sua situação...";
-      chatBox.appendChild(loading);
-
-      // Enviar para backend
       fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -224,22 +66,15 @@
       })
       .then(r => r.json())
       .then(data => {
-        // Remover loading
-        chatBox.removeChild(loading);
-        // Adicionar resposta
         adicionarMensagem(data.resposta, "bot");
       })
       .catch(err => {
-        chatBox.removeChild(loading);
-        adicionarMensagem("Desculpe, não consegui processar sua pergunta no momento. Tente novamente.", "bot");
+        adicionarMensagem("Erro ao conectar. Tente novamente.", "bot");
       });
     }
 
-    // Enviar com Enter
     input.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        enviarPergunta();
-      }
+      if (e.key === "Enter") enviar();
     });
   </script>
 </body>
