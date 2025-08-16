@@ -58,7 +58,7 @@
       chat.scrollTop = chat.scrollHeight;
     }
 
-    function enviar() {
+    async function enviar() {
       const msg = input.value.trim();
       if (!msg) return;
 
@@ -67,11 +67,19 @@
       input.value = "";
       scrollToBottom();
 
-      // Simulação de resposta (use real quando o backend estiver pronto)
-      setTimeout(() => {
-        chat.innerHTML += `<p><b>Dr. Legal:</b> Obrigado pela sua pergunta! Em breve, um advogado entrará em contato. Para falar agora, <a href="https://wa.me/551199887766" target="_blank">clique aqui</a>.</p>`;
-        scrollToBottom();
-      }, 1000);
+      // Envia para o backend
+      try {
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pergunta: msg })
+        });
+        const data = await response.json();
+        chat.innerHTML += `<p><b>Dr. Legal:</b> ${data.resposta}</p>`;
+      } catch (error) {
+        chat.innerHTML += `<p><b>Dr. Legal:</b> Desculpe, houve um erro. Tente novamente mais tarde.</p>`;
+      }
+      scrollToBottom();
     }
 
     send.onclick = enviar;

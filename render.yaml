@@ -4,8 +4,7 @@ services:
     plan: free
     envVars:
       - key: GROQ_API_KEY
-        # Deixe o valor vazio aqui. O valor será definido no painel do Render.
-        # Ou comente esta linha — o ideal é configurar no dashboard.
+        value: # Configure no painel do Render
       - key: WHATSAPP_NUMERO
         value: 551199887766
       - key: PORT

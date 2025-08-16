@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # === CONFIGURAÇÕES DO WHATSAPP ===
 WHATSAPP_NUMERO = os.getenv("WHATSAPP_NUMERO", "551199887766")
-WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="
+WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="  # Sem espaços!
 
 # === PALAVRAS-JURÍDICAS POR ÁREA ===
 PALAVRAS_JURIDICAS = {
@@ -103,7 +103,7 @@ def chat():
     p = pergunta.lower()
 
     # Saudações
-    if any(w in p for w in ["oi", "olá", "bom dia"]):
+    if any(w in p for w in ["oi", "olá", "bom dia", "boa tarde"]):
         return jsonify({
             "resposta": (
                 "Olá! Aqui é o <b>Dr. Legal</b>, seu assistente jurídico. 😊<br><br>"
@@ -118,7 +118,7 @@ def chat():
         })
 
     # Despedidas
-    if any(w in p for w in ["tchau", "obrigado"]):
+    if any(w in p for w in ["tchau", "obrigado", "valeu"]):
         return jsonify({"resposta": "Fico feliz em ter ajudado! Conte com o Dr. Legal sempre que precisar. Até breve! 👋"})
 
     # Temas comuns
