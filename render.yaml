@@ -4,7 +4,7 @@ services:
     plan: free
     envVars:
       - key: GROQ_API_KEY
-        # Você vai adicionar no painel do Render
+        value: gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 🔑 Substitua pela sua chave real
       - key: WHATSAPP_NUMERO
         value: 551199887766
       - key: PORT
