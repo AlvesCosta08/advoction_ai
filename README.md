@@ -24,7 +24,7 @@ web
 Backend Flask + Frontend responsivo
 
 
-´´
+```
 projeto/
 ├── ollama-container/
 │   ├── Dockerfile
