@@ -1,34 +1,34 @@
 import logging
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, make_response
+from twilio.twiml.messaging_response import MessagingResponse
+from twilio.request_validator import RequestValidator
 import requests
 import os
-from requests.utils import quote as url_quote
 import secrets
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)
 
 # === LOG ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# === WHATSAPP ===
+# === CONFIGURAÇÕES ===
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
 WHATSAPP_NUMERO = os.getenv("WHATSAPP_NUMERO", "551199887766")
-WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="
+
+# Validador Twilio
+validator = RequestValidator(TWILIO_AUTH_TOKEN)
 
 # === PALAVRAS JURÍDICAS ===
 PALAVRAS_JURIDICAS = {
-    "Direito de Família": ["divórcio", "guarda", "alimentos", "casamento", "adoção"],
-    "Direito Trabalhista": ["demitido", "justa causa", "horas extras", "fgts", "reclamação"],
-    "Direito Previdenciário": ["aposentadoria", "inss", "auxílio-doença", "bpc", "loas"],
-    "Direito do Consumidor": ["golpe", "pix", "cobrança", "procon", "juros abusivos"],
-    "Indenização": ["acidente", "danos", "moral", "erro médico"],
-    "Geral": ["lei", "direito", "advogado", "justiça"]
+    "Família": ["divórcio", "guarda", "alimentos", "casamento", "união estável", "pensão"],
+    "Trabalhista": ["demitido", "justa causa", "horas extras", "fgts", "reclamação", "verbas rescisórias"],
+    "Previdenciário": ["aposentadoria", "inss", "auxílio-doença", "bpc", "loas", "invalidez"],
+    "Consumidor": ["golpe", "pix", "cobrança", "procon", "juros abusivos", "produto com defeito"],
+    "Geral": ["lei", "direito", "advogado", "justiça", "tribunal"]
 }
-
-def eh_tema_juridico(pergunta):
-    p = pergunta.lower()
-    return any(palavra in p for area in PALAVRAS_JURIDICAS.values() for palavra in area)
 
 def detectar_area(pergunta):
     p = pergunta.lower()
@@ -41,17 +41,13 @@ def detectar_area(pergunta):
             melhor = area
     return melhor
 
-def botao_whatsapp(texto, mensagem):
-    msg = url_quote(mensagem)
-    return f'<a href="{WHATSAPP_LINK}{msg}" style="background:#1a3a6e; color:white; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:bold; display:inline-block; margin-top:10px;">📞 {texto}</a>'
-
+# === CHAMADA À GROQ ===
 def perguntar(pergunta):
-    api_key = os.getenv("GROQ_API_KEY")
-    if not api_key:
-        return None
+    if not GROQ_API_KEY:
+        return "Estou com problemas técnicos. Um advogado entrará em contato."
 
     headers = {
-        "Authorization": f"Bearer {api_key}",
+        "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
     data = {
@@ -59,8 +55,8 @@ def perguntar(pergunta):
         "messages": [{"role": "user", "content": f"""
 Você é o Dr. Legal, um advogado virtual empático.
 Responda com até 2 frases, em linguagem simples.
-NUNCA diga 'será analisado'.
-Termine com uma chamada para ação.
+NUNCA diga 'será analisado por um advogado'.
+Seja direto, humano e termine com uma chamada para ação.
 Pergunta: {pergunta}
 Resposta:
         """.strip()}],
@@ -71,54 +67,57 @@ Resposta:
     try:
         resp = requests.post("https://api.groq.com/openai/v1/chat/completions", json=data, headers=headers, timeout=30)
         resp.raise_for_status()
-        resposta = resp.json()["choices"][0]["message"]["content"].strip()
-        especialidade = detectar_area(pergunta)
-        return {"resposta": resposta, "especialidade": especialidade}
+        return resp.json()["choices"][0]["message"]["content"].strip()
     except Exception as e:
-        logger.error(f"Erro na API Groq: {e}")
-        return None
+        logger.error(f"Erro Groq: {e}")
+        return "Sua situação é importante. Vamos te encaminhar para um especialista."
 
-# === ROTAS ===
+# === WEBHOOK TWILIO ===
+@app.route("/twilio", methods=["POST"])
+def twilio_webhook():
+    signature = request.headers.get("X-Twilio-Signature", "")
+    url = request.url
+    params = request.form.to_dict()
+
+    # Valida autenticidade
+    if not validator.validate(url, params, signature):
+        return "Não autorizado", 403
+
+    incoming_msg = request.form.get("Body", "").strip()
+    sender = request.form.get("From")  # whatsapp:+5511999999999
+
+    # Respostas rápidas
+    if incoming_msg.lower() in ["oi", "olá", "ola"]:
+        resposta = (
+            "Olá! Sou o *Dr. Legal*, seu assistente jurídico virtual. 😊\n\n"
+            "Posso te ajudar com:\n"
+            "• Divórcio, guarda, pensão\n"
+            "• Demissão, FGTS, horas extras\n"
+            "• Golpes no PIX, cobranças indevidas\n"
+            "• Aposentadoria, auxílio-doença\n\n"
+            "Me conta o que você precisa?"
+        )
+    elif incoming_msg.lower() in ["tchau", "obrigado"]:
+        resposta = "Fico feliz em ter ajudado! Até breve! 👋"
+    else:
+        area = detectar_area(incoming_msg)
+        ia_response = perguntar(incoming_msg)
+        resposta = f"{ia_response}\n\n📌 *Área sugerida:* {area}"
+
+    # Responde no WhatsApp
+    resp = MessagingResponse()
+    resp.message(resposta)
+    return make_response(str(resp)), 200
+
+# === ROTA WEB (opcional) ===
 @app.route("/")
-def index():
-    return render_template("index.html")
+def home():
+    return """
+    <h1>💬 Dr. Legal - Assistente Jurídico</h1>
+    <p>Webhook do WhatsApp ativo em <code>/twilio</code>.</p>
+    <p>Envie <strong>join [palavra]</strong> para o número do Twilio.</p>
+    """
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    pergunta = (request.json or {}).get("pergunta", "").strip()
-    if not pergunta:
-        return jsonify({"resposta": f"Olá! Sou o <b>Dr. Legal</b> 🌟<br><br>Posso te ajudar com:<br>⚖️ Família | 💼 Trabalho | 🛡️ Consumidor<br><br>{botao_whatsapp('💬 Falar com advogado', 'Tenho uma dúvida jurídica.')}"})
-
-    p = pergunta.lower()
-
-    if any(w in p for w in ["oi", "olá", "bom dia"]):
-        return jsonify({"resposta": f"Olá! Como posso te ajudar? 😊<br><br>{botao_whatsapp('📞 Falar agora', 'Quero falar com um advogado.')}"})
-
-    if any(w in p for w in ["tchau", "obrigado"]):
-        return jsonify({"resposta": "Até logo! Conte com o Dr. Legal!"})
-
-    temas = {
-        "divórcio": "Temos especialistas em divórcio rápido.",
-        "trabalho": "Podemos te ajudar com direitos trabalhistas.",
-        "pix": "Errou no PIX? Temos ações para recuperar."
-    }
-    for tema, desc in temas.items():
-        if tema in p:
-            esp = detectar_area(pergunta)
-            return jsonify({"resposta": f"{desc}<br><br>📌 <b>{esp}</b><br>{botao_whatsapp(f'📞 Falar com {esp}', f'Quero falar sobre {tema}.')}"})
-
-    if eh_tema_juridico(pergunta):
-        resultado = perguntar(pergunta)
-        if resultado:
-            esp = resultado["especialidade"]
-            return jsonify({"resposta": f"{resultado['resposta']}<br><br>📌 <b>{esp}</b><br>{botao_whatsapp(f'📞 Falar com {esp}', f'Preciso de ajuda com {esp}.')}"})
-        else:
-            esp = detectar_area(pergunta)
-            return jsonify({"resposta": f"Vamos te encaminhar para um especialista em {esp}.<br>{botao_whatsapp('✅ Enviar caso', pergunta[:100])}"})
-
-    return jsonify({"resposta": f"Isso é importante, mas meu foco é direito.<br><br>{botao_whatsapp('✅ Falar sobre direitos', 'Quero falar sobre um problema jurídico.')}"})
-
-# === INICIAR ===
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
