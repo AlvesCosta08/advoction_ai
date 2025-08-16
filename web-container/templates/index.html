@@ -2,173 +2,15 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Dr. Legal - Seu Assistente Jurídico 24h</title>
-
-  <!-- Tailwind CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Legal - Seu Advogado Virtual 24h</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font Awesome para ícones -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
-
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      margin: 0;
-      padding: 0;
-      color: #1e293b;
     }
-
-    /* Botão flutuante */
-    .chatbot-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 16px rgba(26, 58, 110, 0.3);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 50;
-      animation: pulse 2s infinite;
-    }
-    .chatbot-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(26, 58, 110, 0.4);
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(26, 58, 110, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(26, 58, 110, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(26, 58, 110, 0); }
-    }
-
-    /* Chat flutuante */
-    .chat-container {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 360px;
-      max-width: 90vw;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
-      overflow: hidden;
-      display: none;
-      z-index: 40;
-      flex-direction: column;
-      max-height: 600px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .chat-header {
-      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
-      color: white;
-      padding: 14px 16px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 15px;
-    }
-
-    .chat-header i {
-      font-size: 16px;
-    }
-
-    .chat-body {
-      flex-grow: 1;
-      padding: 12px 16px;
-      max-height: 400px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #f8fafc;
-    }
-
-    .chat-footer {
-      padding: 12px 16px;
-      background: white;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      gap: 8px;
-    }
-
-    .chat-footer input {
-      flex: 1;
-      padding: 10px 14px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .chat-footer input:focus {
-      border-color: #1a3a6e;
-      box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.1);
-    }
-
-    .chat-footer button {
-      background: #1a3a6e;
-      color: white;
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .chat-footer button:hover {
-      background: #2d5aa8;
-    }
-
-    /* Balões de chat */
-    .message {
-      padding: 10px 14px;
-      border-radius: 18px;
-      max-width: 80%;
-      line-height: 1.5;
-    }
-
-    .bot-message {
-      background-color: #f1f5f9;
-      color: #1e293b;
-      align-self: flex-start;
-    }
-
-    .user-message {
-      background-color: #1a3a6e;
-      color: white;
-      align-self: flex-end;
-    }
-
-    /* Avatar */
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-    }
-
-    /* Efeito de digitação */
     .typing {
       border-right: 2px solid #1a3a6e;
       animation: blink 0.8s infinite;
@@ -177,164 +19,129 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
-
-    /* Botão personalizado */
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 14px;
+    }
+    .bot-avatar {
+      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
+    }
+    .user-avatar {
+      background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    }
+    .chat-bubble {
+      max-width: 80%;
+      border-radius: 18px;
+      padding: 12px 16px;
+      line-height: 1.5;
+    }
+    .bot-bubble {
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+    .user-bubble {
+      background-color: #1a3a6e;
+      color: white;
+    }
+    #pergunta:focus {
+      box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.2);
+      border-color: #1a3a6e;
+    }
     .btn-whatsapp {
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
-      padding: 12px 18px;
-      border-radius: 10px;
-      text-decoration: none;
       font-weight: 600;
-      display: inline-block;
-      font-size: 15px;
-      box-shadow: 0 2px 8px rgba(26, 58, 110, 0.2);
+      transition: all 0.3s ease;
     }
-
-    /* Responsividade */
-    @media (max-width: 640px) {
-      .chat-container {
-        width: 95vw;
-        right: 2.5vw;
-        bottom: 80px;
-        left: auto;
-      }
-      .chatbot-btn {
-        width: 60px;
-        height: 60px;
-        bottom: 16px;
-        right: 16px;
-      }
-      .container {
-        padding: 16px;
-      }
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 58, 110, 0.3);
     }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col">
 
-  <!-- ======= LANDING PAGE ======= -->
-  <div class="container mx-auto px-4 py-8 max-w-4xl">
-
-    <!-- Cabeçalho -->
-    <header class="text-center mb-10">
-      <div class="text-5xl mb-3">⚖️</div>
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Dr. Legal</h1>
-      <p class="text-lg text-gray-600 mb-4">Seu assistente jurídico virtual 24h</p>
-      <p class="text-sm text-gray-500">Confidencial • Rápido • Direto ao ponto</p>
-    </header>
-
-    <!-- Benefícios -->
-    <section class="grid gap-5 mb-10">
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <h3 class="text-lg font-semibold text-blue-800 mb-2">💬 Atendimento Imediato</h3>
-        <p>Sem esperar por horário marcado. Você é atendido na hora, a qualquer momento do dia.</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <h3 class="text-lg font-semibold text-blue-800 mb-2">🔒 Totalmente Confidencial</h3>
-        <p>Sua situação é sigilosa. Nenhum dado é armazenado ou compartilhado com terceiros.</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <h3 class="text-lg font-semibold text-blue-800 mb-2">📞 Conexão com Advogado Real</h3>
-        <p>Após a orientação, você é direcionado para um especialista com apenas um clique.</p>
-      </div>
-    </section>
-
-    <!-- CTA Principal -->
-    <div class="text-center bg-white p-6 rounded-2xl shadow-md border mb-12">
-      <h2 class="text-2xl font-bold text-gray-800 mb-3">Precisa de ajuda jurídica?</h2>
-      <p class="text-gray-600 mb-5">Clique no botão flutuante e converse agora com o <b>Assistente Jurídico</b>.</p>
-      <button onclick="abrirChat()" class="btn-whatsapp">
-        <i class="fas fa-robot mr-2"></i> Falar com o Assistente
-      </button>
+  <!-- Cabeçalho -->
+  <header class="text-center py-6 px-4">
+    <div class="avatar bot-avatar mx-auto mb-2">
+      <i class="fas fa-balance-scale"></i>
     </div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">⚖️ Dr. Legal</h1>
+    <p class="text-gray-600">Seu advogado virtual 24h — confidencial, rápido e humano</p>
+  </header>
 
-    <!-- Depoimento (opcional) -->
-    <div class="text-center text-sm text-gray-500 mt-8">
-      <p>"Me ajudou a entender meus direitos em 2 minutos e consegui agendar com um advogado!" — Maria S., SP</p>
-    </div>
-
-  </div>
-
-  <!-- ======= CHATBOT FLUTUANTE ======= -->
-  <div class="chatbot-btn" onclick="alternarChat()" title="Assistente Jurídico">
-    <i class="fas fa-robot text-2xl"></i>
-  </div>
-
-  <div class="chat-container" id="chatContainer">
-    <div class="chat-header">
-      <span><i class="fas fa-robot"></i> Assistente Jurídico</span>
-      <button onclick="fecharChat()" class="text-white hover:text-gray-200 text-lg font-bold">×</button>
-    </div>
-    <div class="chat-body" id="chatBody">
+  <!-- Chat -->
+  <div class="flex-grow container mx-auto px-4 pb-4">
+    <div id="chat" class="max-w-lg mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 h-96 overflow-y-auto p-4 space-y-3">
       <!-- Mensagem inicial -->
       <div class="flex items-start gap-2">
-        <div class="avatar"><i class="fas fa-robot"></i></div>
-        <div class="message bot-message">
-          Olá! Aqui é o <b>Dr. Legal</b>.<br>Como posso te ajudar com seus direitos hoje?
+        <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="chat-bubble bot-bubble">
+          <p class="typing">Olá! Aqui é o <b>Dr. Legal</b>.<br>Como posso te ajudar com seus direitos hoje?</p>
         </div>
       </div>
     </div>
-    <div class="chat-footer">
+  </div>
+
+  <!-- Input -->
+  <div class="container mx-auto px-4 pb-6">
+    <div class="max-w-lg mx-auto flex gap-2">
       <input 
         type="text" 
         id="pergunta" 
-        placeholder="Digite sua dúvida jurídica..." 
-        onkeypress="if(event.key==='Enter') enviar()"
+        placeholder="Descreva sua situação jurídica..." 
+        class="flex-grow p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-blue-500 transition"
+        autofocus
       />
-      <button onclick="enviar()">
+      <button 
+        onclick="enviar()" 
+        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition flex items-center gap-2">
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
+    <p class="text-center text-gray-500 text-sm mt-3">
+      <i class="fas fa-lock text-xs mr-1"></i> Conversa 100% segura e confidencial
+    </p>
   </div>
 
   <script>
-    const chatBody = document.getElementById("chatBody");
+    const chat = document.getElementById("chat");
     const input = document.getElementById("pergunta");
-    const chatContainer = document.getElementById("chatContainer");
 
-    // Abrir, alternar e fechar chat
-    function fecharChat() {
-      chatContainer.style.display = "none";
-    }
-
-    function abrirChat() {
-      chatContainer.style.display = "flex";
-      input.focus();
-    }
-
-    function alternarChat() {
-      if (chatContainer.style.display === "flex") {
-        fecharChat();
-      } else {
-        abrirChat();
-      }
-    }
-
-    // Adicionar mensagem
     function adicionarMensagem(texto, tipo) {
-      const typing = chatBody.querySelector(".typing");
+      // Remover "typing" se houver
+      const typing = chat.querySelector(".typing");
       if (typing) typing.classList.remove("typing");
 
       const div = document.createElement("div");
-      div.className = "flex " + (tipo === "user" ? "justify-end" : "items-start") + " gap-2";
+      div.className = tipo === "user" 
+        ? "flex justify-end items-start gap-2" 
+        : "flex items-start gap-2";
 
-      const avatar = tipo === "user" 
-        ? '' 
-        : '<div class="avatar"><i class="fas fa-robot"></i></div>';
+      const avatar = tipo === "user"
+        ? '<div class="avatar user-avatar"><i class="fas fa-user"></i></div>'
+        : '<div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>';
 
-      const messageClass = tipo === "user" ? "user-message" : "bot-message";
+      const bubbleClass = tipo === "user" ? "user-bubble" : "bot-bubble";
 
       div.innerHTML = `
         ${avatar}
-        <div class="message ${messageClass}">${texto}</div>
+        <div class="chat-bubble ${bubbleClass}">
+          <div class="content">${texto}</div>
+        </div>
       `;
       
-      chatBody.appendChild(div);
-      chatBody.scrollTop = chatBody.scrollHeight;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    // Enviar pergunta
     function enviar() {
       const pergunta = input.value.trim();
       if (!pergunta) return;
@@ -346,11 +153,13 @@
       const typingDiv = document.createElement("div");
       typingDiv.className = "flex items-start gap-2";
       typingDiv.innerHTML = `
-        <div class="avatar"><i class="fas fa-robot"></i></div>
-        <div class="message bot-message typing">Dr. Legal está respondendo...</div>
+        <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="chat-bubble bot-bubble">
+          <p class="typing">Dr. Legal está respondendo...</p>
+        </div>
       `;
-      chatBody.appendChild(typingDiv);
-      chatBody.scrollTop = chatBody.scrollHeight;
+      chat.appendChild(typingDiv);
+      chat.scrollTop = chat.scrollHeight;
 
       // Enviar para backend
       fetch("/chat", {
@@ -360,11 +169,13 @@
       })
       .then(r => r.json())
       .then(data => {
-        chatBody.removeChild(typingDiv);
+        // Remover "digitando..."
+        chat.removeChild(typingDiv);
+        // Adicionar resposta real
         adicionarMensagem(data.resposta, "bot");
       })
       .catch(err => {
-        chatBody.removeChild(typingDiv);
+        chat.removeChild(typingDiv);
         adicionarMensagem("Desculpe, não consegui conectar. Tente novamente.", "bot");
       });
     }
@@ -374,14 +185,11 @@
       if (e.key === "Enter") enviar();
     });
 
-    // Fechar chat ao clicar fora (mobile)
-    document.addEventListener("click", (e) => {
-      const isClickInside = chatContainer.contains(e.target) || e.target.classList.contains("chatbot-btn");
-      if (!isClickInside && chatContainer.style.display === "flex") {
-        fecharChat();
-      }
-    });
+    // Remover "typing" após 2 segundos se não responder
+    setTimeout(() => {
+      const typing = chat.querySelector(".typing");
+      if (typing) typing.textContent = "Dr. Legal está respondendo...";
+    }, 2000);
   </script>
-
 </body>
 </html>
