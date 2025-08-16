@@ -3,6 +3,10 @@ from flask import Flask, render_template, request, jsonify
 import requests
 import os
 from requests.utils import quote as url_quote
+from dotenv import load_dotenv  # ← Adicionado
+
+# Carrega as variáveis de ambiente do .env
+load_dotenv()  # ← Essencial para ler GROQ_API_KEY
 
 app = Flask(__name__)
 
@@ -57,7 +61,7 @@ def perguntar(pergunta: str) -> dict | None:
         "Content-Type": "application/json"
     }
     data = {
-        "model": "llama3-8b-8192",
+        "model": "llama3-8b-8192",  # Certifique-se de que este modelo está disponível
         "messages": [{"role": "user", "content": f"""
 Você é o Dr. Legal, um advogado virtual empático.
 Responda com até 2 frases, em linguagem simples.
@@ -71,13 +75,17 @@ Resposta:
     }
 
     try:
+        # ← URL corrigida: sem espaços no final
         resp = requests.post("https://api.groq.com/openai/v1/chat/completions", json=data, headers=headers, timeout=30)
         resp.raise_for_status()
         resposta = resp.json()["choices"][0]["message"]["content"].strip()
         especialidade = detectar_area(pergunta)
         return {"resposta": resposta, "especialidade": especialidade}
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Erro na requisição à API Groq: {e}")
+        return None
     except Exception as e:
-        logger.error(f"Erro na API Groq: {e}")
+        logger.error(f"Erro ao processar resposta da API Groq: {e}")
         return None
 
 # === ROTAS ===
@@ -121,7 +129,7 @@ def chat():
     if any(w in p for w in ["tchau", "obrigado", "valeu"]):
         return jsonify({"resposta": "Fico feliz em ter ajudado! Conte com o Dr. Legal sempre que precisar. Até breve! 👋"})
 
-    # Temas comuns
+    # Temas comuns (exemplos rápidos)
     temas = {
         "divórcio": "Temos especialistas em divórcio rápido, consensual ou litigioso.",
         "trabalho": "Podemos te ajudar com direitos trabalhistas e verbas rescisórias.",
@@ -136,6 +144,7 @@ def chat():
 
     # Usar IA se for tema jurídico
     if eh_tema_juridico(pergunta):
+        logger.info(f"Processando pergunta jurídica com IA: {pergunta}")
         resultado = perguntar(pergunta)
         if resultado:
             esp = resultado["especialidade"]
@@ -143,6 +152,7 @@ def chat():
                 "resposta": f"{resultado['resposta']}<br><br>📌 <b>{esp}</b><br>{botao_whatsapp(f'📞 Falar com especialista em {esp}', f'Preciso de ajuda com um caso de {esp}.')}"
             })
         else:
+            logger.warning("IA falhou. Usando fallback com botão.")
             esp = detectar_area(pergunta)
             return jsonify({
                 "resposta": f"Sua situação envolve direitos importantes.<br><br>Vamos te encaminhar para um <b>especialista em {esp}</b>.<br><br>{botao_whatsapp('📩 Enviar caso para análise', f'Quero ajuda com: {pergunta[:100]}...')}"
