@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: dr-legal-bot
+    plan: free
+    envVars:
+      - key: GROQ_API_KEY
+        value: ${GROQ_API_KEY}
+      - key: WHATSAPP_NUMERO
+        value: 551199887766
+      - key: PORT
+        value: 10000
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
