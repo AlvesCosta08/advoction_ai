@@ -3,37 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dr. Legal - Assistente Jurídico Virtual</title>
+  <title>Dr. Legal - Seu Advogado Virtual 24h</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .typing {
+      border-right: 2px solid #1a3a6e;
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 14px;
+    }
+    .bot-avatar {
+      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
+    }
+    .user-avatar {
+      background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    }
+    .chat-bubble {
+      max-width: 80%;
+      border-radius: 18px;
+      padding: 12px 16px;
+      line-height: 1.5;
+    }
+    .bot-bubble {
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+    .user-bubble {
+      background-color: #1a3a6e;
+      color: white;
+    }
+    #pergunta:focus {
+      box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.2);
+      border-color: #1a3a6e;
+    }
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 58, 110, 0.3);
+    }
+  </style>
 </head>
-<body class="bg-blue-50 min-h-screen flex flex-col">
-  <div class="container mx-auto p-6 flex flex-col items-center flex-grow">
-    <h1 class="text-3xl font-bold text-blue-800 mb-4">⚖️ Dr. Legal</h1>
-    <p class="text-gray-600 mb-6 text-center">Seu assistente jurídico virtual — rápido, gratuito e confidencial</p>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col">
 
-    <div id="chat" class="w-full max-w-lg bg-white rounded-lg shadow p-4 mb-4 h-96 overflow-y-auto border">
+  <!-- Cabeçalho -->
+  <header class="text-center py-6 px-4">
+    <div class="avatar bot-avatar mx-auto mb-2">
+      <i class="fas fa-balance-scale"></i>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">⚖️ Dr. Legal</h1>
+    <p class="text-gray-600">Seu advogado virtual 24h — confidencial, rápido e humano</p>
+  </header>
+
+  <!-- Chat -->
+  <div class="flex-grow container mx-auto px-4 pb-4">
+    <div id="chat" class="max-w-lg mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 h-96 overflow-y-auto p-4 space-y-3">
       <!-- Mensagem inicial -->
-      <div class="flex justify-start mb-2">
-        <div class="bg-gray-100 text-gray-800 p-3 rounded-lg max-w-xs">
-          Olá! Aqui é o <b>Dr. Legal</b>.<br>Como posso te ajudar com seus direitos hoje?
+      <div class="flex items-start gap-2">
+        <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="chat-bubble bot-bubble">
+          <p class="typing">Olá! Aqui é o <b>Dr. Legal</b>.<br>Como posso te ajudar com seus direitos hoje?</p>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="flex w-full max-w-lg gap-2">
+  <!-- Input -->
+  <div class="container mx-auto px-4 pb-6">
+    <div class="max-w-lg mx-auto flex gap-2">
       <input 
         type="text" 
         id="pergunta" 
-        placeholder="Digite sua dúvida jurídica..." 
-        class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Descreva sua situação jurídica..." 
+        class="flex-grow p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-blue-500 transition"
         autofocus
       />
       <button 
         onclick="enviar()" 
-        class="bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700">
-        Enviar
+        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition flex items-center gap-2">
+        <i class="fas fa-paper-plane"></i>
       </button>
     </div>
+    <p class="text-center text-gray-500 text-sm mt-3">
+      <i class="fas fa-lock text-xs mr-1"></i> Conversa 100% segura e confidencial
+    </p>
   </div>
 
   <script>
@@ -41,13 +116,28 @@
     const input = document.getElementById("pergunta");
 
     function adicionarMensagem(texto, tipo) {
+      // Remover "typing" se houver
+      const typing = chat.querySelector(".typing");
+      if (typing) typing.classList.remove("typing");
+
       const div = document.createElement("div");
-      div.className = tipo === "user" ? "flex justify-end mb-2" : "flex justify-start mb-2";
+      div.className = tipo === "user" 
+        ? "flex justify-end items-start gap-2" 
+        : "flex items-start gap-2";
+
+      const avatar = tipo === "user"
+        ? '<div class="avatar user-avatar"><i class="fas fa-user"></i></div>'
+        : '<div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>';
+
+      const bubbleClass = tipo === "user" ? "user-bubble" : "bot-bubble";
+
       div.innerHTML = `
-        <div class="${tipo === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'} p-3 rounded-lg max-w-xs">
-          ${texto}
+        ${avatar}
+        <div class="chat-bubble ${bubbleClass}">
+          <div class="content">${texto}</div>
         </div>
       `;
+      
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
@@ -59,6 +149,19 @@
       adicionarMensagem(pergunta, "user");
       input.value = "";
 
+      // Mostrar "digitando..."
+      const typingDiv = document.createElement("div");
+      typingDiv.className = "flex items-start gap-2";
+      typingDiv.innerHTML = `
+        <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="chat-bubble bot-bubble">
+          <p class="typing">Dr. Legal está respondendo...</p>
+        </div>
+      `;
+      chat.appendChild(typingDiv);
+      chat.scrollTop = chat.scrollHeight;
+
+      // Enviar para backend
       fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,16 +169,27 @@
       })
       .then(r => r.json())
       .then(data => {
+        // Remover "digitando..."
+        chat.removeChild(typingDiv);
+        // Adicionar resposta real
         adicionarMensagem(data.resposta, "bot");
       })
       .catch(err => {
-        adicionarMensagem("Erro ao conectar. Tente novamente.", "bot");
+        chat.removeChild(typingDiv);
+        adicionarMensagem("Desculpe, não consegui conectar. Tente novamente.", "bot");
       });
     }
 
+    // Enviar com Enter
     input.addEventListener("keypress", (e) => {
       if (e.key === "Enter") enviar();
     });
+
+    // Remover "typing" após 2 segundos se não responder
+    setTimeout(() => {
+      const typing = chat.querySelector(".typing");
+      if (typing) typing.textContent = "Dr. Legal está respondendo...";
+    }, 2000);
   </script>
 </body>
 </html>
