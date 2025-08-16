@@ -36,6 +36,7 @@
       display: flex;
       flex-direction: column;
       gap: 30px;
+      padding-bottom: 100px; /* Evita sobreposição do ícone do WhatsApp */
     }
 
     header {
@@ -211,6 +212,7 @@
         <div class="service-card"><strong>Consumidor</strong> Golpes, cobranças, juros</div>
         <div class="service-card"><strong>Previdência</strong> Aposentadoria, auxílio-doença</div>
       </div>
+      <!-- ✅ Link corrigido: SEM espaços antes do https -->
       <a href="https://wa.me/551199887766?text=Tenho%20uma%20dúvida%20jurídica%20urgente" class="cta-button">
         📞 FALAR COM UM ADVOGADO AGORA
       </a>
@@ -222,6 +224,7 @@
     </footer>
   </div>
 
+  <!-- ✅ Link do WhatsApp fixo corrigido: SEM espaços -->
   <a href="https://wa.me/551199887766?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20gratuita" class="whatsapp-icon" target="_blank">💬</a>
 
   <script>
@@ -229,20 +232,21 @@
     const input = document.getElementById("input");
     const send = document.getElementById("send");
 
-    send.onclick = () => enviar();
-    input.onkeypress = (e) => e.key === "Enter" && enviar();
-
+    // Função para rolar o chat para o final
     function scrollToBottom() {
       chat.scrollTop = chat.scrollHeight;
     }
 
+    // Função de envio
     function enviar() {
       const msg = input.value.trim();
       if (!msg) return;
 
+      // Adiciona a mensagem do usuário
       chat.innerHTML += `<p style="margin: 8px 0; color: #000;"><b>Você:</b> ${msg}</p>`;
       scrollToBottom();
 
+      // Chama a API
       fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -258,8 +262,16 @@
         scrollToBottom();
       });
 
+      // Limpa o input
       input.value = "";
     }
+
+    // Enviar ao clicar no botão ou pressionar Enter
+    send.onclick = enviar;
+    input.onkeypress = (e) => e.key === "Enter" && enviar();
+
+    // Rolar ao final ao carregar
+    scrollToBottom();
   </script>
 </body>
 </html>
