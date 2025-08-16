@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # === CONFIGURAÇÕES DO WHATSAPP ===
 WHATSAPP_NUMERO = os.getenv("WHATSAPP_NUMERO", "551199887766")
-WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="  # ✅ Sem espaços
+WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="
 
 # === PALAVRAS-JURÍDICAS POR ÁREA ===
 PALAVRAS_JURIDICAS = {
@@ -71,13 +71,7 @@ Resposta:
     }
 
     try:
-        # ✅ URL corrigida: sem espaços
-        resp = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            json=data,
-            headers=headers,
-            timeout=30
-        )
+        resp = requests.post("https://api.groq.com/openai/v1/chat/completions", json=data, headers=headers, timeout=30)
         resp.raise_for_status()
         resposta = resp.json()["choices"][0]["message"]["content"].strip()
         especialidade = detectar_area(pergunta)
@@ -93,7 +87,6 @@ def index():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    logger.info(f"Recebendo requisição POST em /chat: {request.json}")  # 🔍 Log de depuração
     data = request.json or {}
     pergunta = data.get("pergunta", "").strip()
 
@@ -125,10 +118,10 @@ def chat():
         })
 
     # Despedidas
-    if any(w in p for w in ["tchau", "obrigado", "valeu"]):
+    if any(w in p for w in ["tchau", "obrigado"]):
         return jsonify({"resposta": "Fico feliz em ter ajudado! Conte com o Dr. Legal sempre que precisar. Até breve! 👋"})
 
-    # Temas comuns (opcional, pode ser removido para forçar IA)
+    # Temas comuns
     temas = {
         "divórcio": "Temos especialistas em divórcio rápido, consensual ou litigioso.",
         "trabalho": "Podemos te ajudar com direitos trabalhistas e verbas rescisórias.",
@@ -141,9 +134,8 @@ def chat():
                 "resposta": f"{desc}<br><br>📌 <b>{esp}</b><br>{botao_whatsapp(f'📞 Falar com {esp}', f'Quero falar sobre {tema}.')}"
             })
 
-    # ✅ USAR IA SE FOR TEMA JURÍDICO
+    # Usar IA se for tema jurídico
     if eh_tema_juridico(pergunta):
-        logger.info("Tema jurídico detectado. Chamando IA...")
         resultado = perguntar(pergunta)
         if resultado:
             esp = resultado["especialidade"]
