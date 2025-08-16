@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dr. Legal - Seu Assistente Jurídico 24h</title>
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font Awesome para ícones -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -77,7 +77,7 @@
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
       font-size: 15px;
     }
 
@@ -111,7 +111,6 @@
       border-radius: 10px;
       outline: none;
       font-size: 14px;
-      transition: border 0.2s;
     }
 
     .chat-footer input:focus {
@@ -130,7 +129,6 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s;
     }
 
     .chat-footer button:hover {
@@ -180,7 +178,7 @@
       50% { opacity: 0; }
     }
 
-    /* Botão WhatsApp personalizado */
+    /* Botão personalizado */
     .btn-whatsapp {
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
@@ -193,39 +191,22 @@
       box-shadow: 0 2px 8px rgba(26, 58, 110, 0.2);
     }
 
-    /* Seções da landing page */
-    .section {
-      padding: 32px 0;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e2e8f0;
-    }
-
-    h1, h2, h3 {
-      color: #0f172a;
-      font-weight: 700;
-    }
-
-    p {
-      color: #475569;
-    }
-
+    /* Responsividade */
     @media (max-width: 640px) {
       .chat-container {
         width: 95vw;
         right: 2.5vw;
         bottom: 80px;
+        left: auto;
       }
       .chatbot-btn {
         width: 60px;
         height: 60px;
         bottom: 16px;
         right: 16px;
+      }
+      .container {
+        padding: 16px;
       }
     }
   </style>
@@ -244,16 +225,16 @@
     </header>
 
     <!-- Benefícios -->
-    <section class="grid gap-5 mb-10 section">
-      <div class="card">
+    <section class="grid gap-5 mb-10">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
         <h3 class="text-lg font-semibold text-blue-800 mb-2">💬 Atendimento Imediato</h3>
         <p>Sem esperar por horário marcado. Você é atendido na hora, a qualquer momento do dia.</p>
       </div>
-      <div class="card">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
         <h3 class="text-lg font-semibold text-blue-800 mb-2">🔒 Totalmente Confidencial</h3>
         <p>Sua situação é sigilosa. Nenhum dado é armazenado ou compartilhado com terceiros.</p>
       </div>
-      <div class="card">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
         <h3 class="text-lg font-semibold text-blue-800 mb-2">📞 Conexão com Advogado Real</h3>
         <p>Após a orientação, você é direcionado para um especialista com apenas um clique.</p>
       </div>
@@ -282,7 +263,8 @@
 
   <div class="chat-container" id="chatContainer">
     <div class="chat-header">
-      <i class="fas fa-robot"></i> Assistente Jurídico
+      <span><i class="fas fa-robot"></i> Assistente Jurídico</span>
+      <button onclick="fecharChat()" class="text-white hover:text-gray-200 text-lg font-bold">×</button>
     </div>
     <div class="chat-body" id="chatBody">
       <!-- Mensagem inicial -->
@@ -311,19 +293,22 @@
     const input = document.getElementById("pergunta");
     const chatContainer = document.getElementById("chatContainer");
 
-    // Alternar chat
-    function alternarChat() {
-      if (chatContainer.style.display === "flex") {
-        chatContainer.style.display = "none";
-      } else {
-        chatContainer.style.display = "flex";
-        input.focus();
-      }
+    // Abrir, alternar e fechar chat
+    function fecharChat() {
+      chatContainer.style.display = "none";
     }
 
     function abrirChat() {
       chatContainer.style.display = "flex";
       input.focus();
+    }
+
+    function alternarChat() {
+      if (chatContainer.style.display === "flex") {
+        fecharChat();
+      } else {
+        abrirChat();
+      }
     }
 
     // Adicionar mensagem
@@ -391,9 +376,9 @@
 
     // Fechar chat ao clicar fora (mobile)
     document.addEventListener("click", (e) => {
-      const isClickInside = chatContainer.contains(e.target) || e.target.classList.contains("chatbot-btn") || chatContainer.style.display !== "flex";
-      if (!isClickInside) {
-        chatContainer.style.display = "none";
+      const isClickInside = chatContainer.contains(e.target) || e.target.classList.contains("chatbot-btn");
+      if (!isClickInside && chatContainer.style.display === "flex") {
+        fecharChat();
       }
     });
   </script>
