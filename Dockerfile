@@ -8,7 +8,7 @@ WORKDIR /app
 COPY web-container/requirements.txt .
 COPY web-container/app.py .
 COPY web-container/templates ./templates
-COPY web-container/.env.example ./.env  # opcional (não use .env real no build)
+
 
 # Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
