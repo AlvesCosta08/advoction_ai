@@ -37,6 +37,8 @@ projeto/
 ├── docker-compose.yml
 └── README.md
 
+```
+
 ⚙️ Como Funciona
 1. IA Local (Ollama)
 Modelo: tinyllama:1.1b
