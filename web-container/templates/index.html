@@ -2,34 +2,41 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dr. Legal - Seu Advogado Virtual 24h</title>
-  <!-- Tailwind CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dr. Legal - Seu Assistente Jurídico 24h</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Font Awesome para ícones -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body {
       font-family: 'Inter', sans-serif;
-      overflow-y: scroll;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      margin: 0;
+      padding: 0;
+      color: #1e293b;
     }
+
     /* Botão flutuante */
     .chatbot-btn {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 20px;
+      right: 20px;
+      width: 64px;
+      height: 64px;
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
-      width: 60px;
-      height: 60px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 14px rgba(26, 58, 110, 0.3);
+      box-shadow: 0 4px 16px rgba(26, 58, 110, 0.3);
       cursor: pointer;
       transition: all 0.3s ease;
       z-index: 50;
@@ -37,7 +44,7 @@
     }
     .chatbot-btn:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 18px rgba(26, 58, 110, 0.4);
+      box-shadow: 0 6px 20px rgba(26, 58, 110, 0.4);
     }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(26, 58, 110, 0.4); }
@@ -49,100 +56,121 @@
     .chat-container {
       position: fixed;
       bottom: 90px;
-      right: 24px;
-      width: 380px;
+      right: 20px;
+      width: 360px;
       max-width: 90vw;
       background: white;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
       overflow: hidden;
       display: none;
       z-index: 40;
       flex-direction: column;
       max-height: 600px;
+      border: 1px solid #e2e8f0;
     }
+
     .chat-header {
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
-      padding: 12px 16px;
+      padding: 14px 16px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 14px;
+      font-size: 15px;
     }
+
     .chat-header i {
       font-size: 16px;
     }
+
     .chat-body {
       flex-grow: 1;
-      padding: 16px;
+      padding: 12px 16px;
       max-height: 400px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      background: #f9fafb;
+      gap: 10px;
+      background: #f8fafc;
     }
+
     .chat-footer {
-      padding: 12px;
+      padding: 12px 16px;
       background: white;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid #e2e8f0;
       display: flex;
       gap: 8px;
     }
+
     .chat-footer input {
       flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
       outline: none;
       font-size: 14px;
+      transition: border 0.2s;
     }
+
+    .chat-footer input:focus {
+      border-color: #1a3a6e;
+      box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.1);
+    }
+
     .chat-footer button {
       background: #1a3a6e;
       color: white;
       border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background 0.2s;
     }
+
     .chat-footer button:hover {
       background: #2d5aa8;
     }
 
     /* Balões de chat */
     .message {
-      max-width: 80%;
       padding: 10px 14px;
       border-radius: 18px;
+      max-width: 80%;
       line-height: 1.5;
     }
+
     .bot-message {
       background-color: #f1f5f9;
       color: #1e293b;
       align-self: flex-start;
     }
+
     .user-message {
       background-color: #1a3a6e;
       color: white;
       align-self: flex-end;
     }
+
+    /* Avatar */
     .avatar {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 15px;
     }
+
+    /* Efeito de digitação */
     .typing {
       border-right: 2px solid #1a3a6e;
       animation: blink 0.8s infinite;
@@ -151,60 +179,98 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
+
+    /* Botão WhatsApp personalizado */
     .btn-whatsapp {
       background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa8 100%);
       color: white;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 12px 18px;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: 600;
       display: inline-block;
-      margin-top: 8px;
-      font-size: 14px;
+      font-size: 15px;
+      box-shadow: 0 2px 8px rgba(26, 58, 110, 0.2);
+    }
+
+    /* Seções da landing page */
+    .section {
+      padding: 32px 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+
+    h1, h2, h3 {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    p {
+      color: #475569;
+    }
+
+    @media (max-width: 640px) {
+      .chat-container {
+        width: 95vw;
+        right: 2.5vw;
+        bottom: 80px;
+      }
+      .chatbot-btn {
+        width: 60px;
+        height: 60px;
+        bottom: 16px;
+        right: 16px;
+      }
     }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="min-h-screen">
 
   <!-- ======= LANDING PAGE ======= -->
-  <div class="container mx-auto px-6 py-12 max-w-4xl">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
 
     <!-- Cabeçalho -->
-    <header class="text-center mb-12">
-      <div class="text-5xl mb-4">⚖️</div>
-      <h1 class="text-4xl font-bold text-gray-800 mb-4">Dr. Legal</h1>
-      <p class="text-xl text-gray-600 mb-6">Seu assistente jurídico virtual — confidencial, 24h e sem burocracia</p>
-      <div class="flex justify-center gap-4 text-sm text-gray-500">
-        <span>💼 Trabalho</span> • <span>🏠 Família</span> • <span>🛡️ Consumidor</span> • <span>🏥 Previdência</span>
-      </div>
+    <header class="text-center mb-10">
+      <div class="text-5xl mb-3">⚖️</div>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Dr. Legal</h1>
+      <p class="text-lg text-gray-600 mb-4">Seu assistente jurídico virtual 24h</p>
+      <p class="text-sm text-gray-500">Confidencial • Rápido • Direto ao ponto</p>
     </header>
 
-    <!-- Seção de Benefícios -->
-    <section class="grid md:grid-cols-3 gap-8 mb-12">
-      <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-        <div class="text-3xl mb-3">⚡</div>
-        <h3 class="font-semibold text-gray-800 mb-2">Resposta Imediata</h3>
-        <p class="text-gray-600 text-sm">Sem esperar por atendimento. Você é atendido na hora, 24h por dia.</p>
+    <!-- Benefícios -->
+    <section class="grid gap-5 mb-10 section">
+      <div class="card">
+        <h3 class="text-lg font-semibold text-blue-800 mb-2">💬 Atendimento Imediato</h3>
+        <p>Sem esperar por horário marcado. Você é atendido na hora, a qualquer momento do dia.</p>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-        <div class="text-3xl mb-3">🔒</div>
-        <h3 class="font-semibold text-gray-800 mb-2">100% Confidencial</h3>
-        <p class="text-gray-600 text-sm">Sua situação é sigilosa. Nenhum dado é compartilhado.</p>
+      <div class="card">
+        <h3 class="text-lg font-semibold text-blue-800 mb-2">🔒 Totalmente Confidencial</h3>
+        <p>Sua situação é sigilosa. Nenhum dado é armazenado ou compartilhado com terceiros.</p>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-        <div class="text-3xl mb-3">📞</div>
-        <h3 class="font-semibold text-gray-800 mb-2">Fale com um Advogado</h3>
-        <p class="text-gray-600 text-sm">Após a orientação, conecte-se diretamente com um especialista.</p>
+      <div class="card">
+        <h3 class="text-lg font-semibold text-blue-800 mb-2">📞 Conexão com Advogado Real</h3>
+        <p>Após a orientação, você é direcionado para um especialista com apenas um clique.</p>
       </div>
     </section>
 
-    <!-- CTA Final -->
-    <div class="text-center bg-blue-50 p-8 rounded-2xl border border-blue-100">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Precisa de ajuda jurídica agora?</h2>
-      <p class="text-gray-600 mb-6">Use o botão flutuante no canto inferior direito para conversar com o <b>Assistente Jurídico</b>.</p>
-      <button onclick="abrirChat()" class="btn-whatsapp py-3 px-6 text-lg">
-        🤖 Abrir Assistente Jurídico
+    <!-- CTA Principal -->
+    <div class="text-center bg-white p-6 rounded-2xl shadow-md border mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 mb-3">Precisa de ajuda jurídica?</h2>
+      <p class="text-gray-600 mb-5">Clique no botão flutuante e converse agora com o <b>Assistente Jurídico</b>.</p>
+      <button onclick="abrirChat()" class="btn-whatsapp">
+        <i class="fas fa-robot mr-2"></i> Falar com o Assistente
       </button>
+    </div>
+
+    <!-- Depoimento (opcional) -->
+    <div class="text-center text-sm text-gray-500 mt-8">
+      <p>"Me ajudou a entender meus direitos em 2 minutos e consegui agendar com um advogado!" — Maria S., SP</p>
     </div>
 
   </div>
@@ -231,7 +297,7 @@
       <input 
         type="text" 
         id="pergunta" 
-        placeholder="Digite sua dúvida..." 
+        placeholder="Digite sua dúvida jurídica..." 
         onkeypress="if(event.key==='Enter') enviar()"
       />
       <button onclick="enviar()">
@@ -247,11 +313,14 @@
 
     // Alternar chat
     function alternarChat() {
-      chatContainer.style.display = chatContainer.style.display === "flex" ? "none" : "flex";
       if (chatContainer.style.display === "flex") {
+        chatContainer.style.display = "none";
+      } else {
+        chatContainer.style.display = "flex";
         input.focus();
       }
     }
+
     function abrirChat() {
       chatContainer.style.display = "flex";
       input.focus();
@@ -318,6 +387,14 @@
     // Enviar com Enter
     input.addEventListener("keypress", (e) => {
       if (e.key === "Enter") enviar();
+    });
+
+    // Fechar chat ao clicar fora (mobile)
+    document.addEventListener("click", (e) => {
+      const isClickInside = chatContainer.contains(e.target) || e.target.classList.contains("chatbot-btn") || chatContainer.style.display !== "flex";
+      if (!isClickInside) {
+        chatContainer.style.display = "none";
+      }
     });
   </script>
 
