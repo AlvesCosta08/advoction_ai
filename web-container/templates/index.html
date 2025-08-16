@@ -1,20 +1,228 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Dr. Legal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Legal – Seu Direito Protegido</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Arial; max-width: 600px; margin: 40px auto; padding: 20px; }
-    #chat { border: 1px solid #ccc; height: 400px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
-    #input { width: 70%; padding: 10px; }
-    #send { padding: 10px; }
+    :root {
+      --primary: #1a3a6e;
+      --primary-hover: #2c5290;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--light);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .input-group button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .input-group button:hover {
+      background: var(--primary-hover);
+    }
+
+    .cta-button {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    .cta-button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .service-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .service-card strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .whatsapp-icon {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      z-index: 100;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
-  <h1>💬 Dr. Legal</h1>
-  <div id="chat">Olá! Sou o Dr. Legal. Pergunte algo sobre direitos.</div>
-  <input type="text" id="input" placeholder="Digite sua dúvida..." />
-  <button id="send">Enviar</button>
+  <div class="container">
+    <header>
+      <h1>💬 Dr. Legal</h1>
+      <p>Seu assistente jurídico 24h. Tire dúvidas e agende uma consulta gratuita.</p>
+    </header>
+
+    <div class="card">
+      <div id="chat" class="chat-box">
+        Olá! Sou o <b>Dr. Legal</b>, seu assistente jurídico virtual.<br><br>
+        Como posso te ajudar?<br><br>
+        <i>Exemplos:</i><br>
+        • "Fui demitido sem justa causa"<br>
+        • "Caí em golpe no PIX"<br>
+        • "Quero me divorciar"
+      </div>
+      <div class="input-group">
+        <input type="text" id="input" placeholder="Digite sua dúvida jurídica..." />
+        <button id="send">Enviar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Áreas de atuação</h3>
+      <div class="services">
+        <div class="service-card"><strong>Família</strong> Divórcio, guarda, pensão</div>
+        <div class="service-card"><strong>Trabalho</strong> Demissão, FGTS, horas extras</div>
+        <div class="service-card"><strong>Consumidor</strong> Golpes, cobranças, juros</div>
+        <div class="service-card"><strong>Previdência</strong> Aposentadoria, auxílio-doença</div>
+      </div>
+      <a href="https://wa.me/551199887766?text=Tenho%20uma%20dúvida%20jurídica%20urgente" class="cta-button">
+        📞 FALAR COM UM ADVOGADO AGORA
+      </a>
+    </div>
+
+    <footer>
+      © 2025 Dr. Legal. Todos os direitos reservados.<br>
+      Escritório especializado em direito familiar, trabalhista e previdenciário.
+    </footer>
+  </div>
+
+  <a href="https://wa.me/551199887766?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20gratuita" class="whatsapp-icon" target="_blank">💬</a>
 
   <script>
     const chat = document.getElementById("chat");
@@ -24,11 +232,17 @@
     send.onclick = () => enviar();
     input.onkeypress = (e) => e.key === "Enter" && enviar();
 
+    function scrollToBottom() {
+      chat.scrollTop = chat.scrollHeight;
+    }
+
     function enviar() {
       const msg = input.value.trim();
       if (!msg) return;
 
-      chat.innerHTML += `<p><b>Você:</b> ${msg}</p>`;
+      chat.innerHTML += `<p style="margin: 8px 0; color: #000;"><b>Você:</b> ${msg}</p>`;
+      scrollToBottom();
+
       fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,8 +250,12 @@
       })
       .then(r => r.json())
       .then(d => {
-        chat.innerHTML += `<p><b>Dr. Legal:</b> ${d.resposta}</p>`;
-        chat.scrollTop = chat.scrollHeight;
+        chat.innerHTML += `<p style="margin: 8px 0; background: #e3f2fd; padding: 10px; border-radius: 8px;"><b>Dr. Legal:</b> ${d.resposta}</p>`;
+        scrollToBottom();
+      })
+      .catch(() => {
+        chat.innerHTML += `<p style="color: #d32f2f;">Erro: Não foi possível conectar. <a href="https://wa.me/551199887766" style="color: #1a3a6e;">Fale diretamente no WhatsApp</a>.</p>`;
+        scrollToBottom();
       });
 
       input.value = "";
