@@ -2,89 +2,245 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dr. Legal - Seu Assistente Jurídico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Legal - Seu Assistente Jurídico Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: #333;
+      line-height: 1.6;
       padding: 20px;
-      background: #f9f9f9;
+      min-height: 100vh;
     }
-    #chat {
-      border: 1px solid #ccc;
-      height: 400px;
-      overflow-y: scroll;
-      padding: 10px;
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #1a3a6e;
       margin-bottom: 10px;
-      background: white;
-      border-radius: 8px;
     }
-    #input {
-      width: 70%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
+
+    header p {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .chat-box {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      border-radius: 18px;
+      max-width: 80%;
+      line-height: 1.5;
+    }
+
+    .bot {
+      background-color: #f0f4f8;
+      color: #222;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      margin-left: 10px;
+    }
+
+    .user {
+      background-color: #1a3a6e;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+      border-bottom-right-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .msg-container {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .msg-container.user-msg {
+      justify-content: flex-end;
+    }
+
+    .msg-container.bot-msg {
+      justify-content: flex-start;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    #pergunta {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
       outline: none;
     }
-    #send {
-      padding: 10px;
-      background: #1a3a6e;
+
+    #pergunta:focus {
+      border-color: #1a3a6e;
+      box-shadow: 0 0 0 2px rgba(26, 58, 110, 0.2);
+    }
+
+    button {
+      background-color: #1a3a6e;
       color: white;
       border: none;
-      border-radius: 6px;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
+      font-weight: 500;
     }
-    #send:hover {
-      background: #2c5290;
+
+    button:hover {
+      background-color: #132b50;
+    }
+
+    .loading {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      padding: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: #1a3a6e;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>💬 Dr. Legal</h1>
-  <div id="chat">
-    Olá! Sou seu assistente jurídico virtual. Como posso te ajudar?
+  <div class="container">
+    <header>
+      <h1>⚖️ Dr. Legal</h1>
+      <p>Seu assistente jurídico virtual — rápido, gratuito e confidencial</p>
+    </header>
+
+    <div class="chat-box" id="chatBox">
+      <!-- Mensagem inicial -->
+      <div class="msg-container bot-msg">
+        <div class="message bot">
+          Olá! Aqui é o <b>Dr. Legal</b> 🌟<br><br>
+          Seu direito é importante — e eu estou aqui para te ajudar.<br><br>
+          Posso te orientar sobre:<br>
+          ⚖️ Família | 💼 Trabalho | 🛡️ Consumidor | 🏥 Previdência<br><br>
+          <a href="https://wa.me/551199887766?text=Tenho+uma+dúvida+jurídica+urgente." 
+             style="background:#1a3a6e; color:white; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:bold; display:inline-block; margin-top:10px;">
+             💬 Falar com um advogado agora
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="pergunta" placeholder="Digite sua dúvida jurídica..." autofocus />
+      <button onclick="enviarPergunta()">Enviar</button>
+    </div>
+
+    <div class="footer">
+      <p>Protegemos sua privacidade. Conversas são seguras e confidenciais. | <a href="https://wa.me/" target="_blank">Tecnologia WhatsApp</a></p>
+    </div>
   </div>
-  <input type="text" id="input" placeholder="Pergunte algo..." />
-  <button id="send">Enviar</button>
 
   <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    const send = document.getElementById("send");
+    const chatBox = document.getElementById("chatBox");
+    const input = document.getElementById("pergunta");
 
-    function scrollToBottom() {
-      chat.scrollTop = chat.scrollHeight;
+    function adicionarMensagem(texto, tipo) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `msg-container ${tipo}-msg`;
+
+      const innerDiv = document.createElement("div");
+      innerDiv.className = `message ${tipo}`;
+      innerDiv.innerHTML = texto;
+
+      msgDiv.appendChild(innerDiv);
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    async function enviar() {
-      const msg = input.value.trim();
-      if (!msg) return;
+    function enviarPergunta() {
+      const pergunta = input.value.trim();
+      if (!pergunta) return;
 
-      // Mostra a mensagem do usuário
-      chat.innerHTML += `<p><b>Você:</b> ${msg}</p>`;
+      // Mostrar pergunta do usuário
+      adicionarMensagem(pergunta, "user");
       input.value = "";
-      scrollToBottom();
 
-      // Envia para o backend
-      try {
-        const response = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pergunta: msg })
-        });
-        const data = await response.json();
-        chat.innerHTML += `<p><b>Dr. Legal:</b> ${data.resposta}</p>`;
-      } catch (error) {
-        chat.innerHTML += `<p><b>Dr. Legal:</b> Desculpe, houve um erro. Tente novamente mais tarde.</p>`;
-      }
-      scrollToBottom();
+      // Mostrar carregamento
+      const loading = document.createElement("div");
+      loading.className = "msg-container bot-msg loading";
+      loading.innerText = "Analisando sua situação...";
+      chatBox.appendChild(loading);
+
+      // Enviar para backend
+      fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pergunta })
+      })
+      .then(r => r.json())
+      .then(data => {
+        // Remover loading
+        chatBox.removeChild(loading);
+        // Adicionar resposta
+        adicionarMensagem(data.resposta, "bot");
+      })
+      .catch(err => {
+        chatBox.removeChild(loading);
+        adicionarMensagem("Desculpe, não consegui processar sua pergunta no momento. Tente novamente.", "bot");
+      });
     }
 
-    send.onclick = enviar;
-    input.onkeypress = (e) => e.key === "Enter" && enviar();
-    scrollToBottom();
+    // Enviar com Enter
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        enviarPergunta();
+      }
+    });
   </script>
 </body>
 </html>
