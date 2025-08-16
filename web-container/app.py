@@ -8,77 +8,46 @@ import secrets
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
-# === CONFIGURAÇÃO DE LOG ===
+# === LOG ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# === CONFIGURAÇÕES DO WHATSAPP ===
+# === WHATSAPP ===
 WHATSAPP_NUMERO = os.getenv("WHATSAPP_NUMERO", "551199887766")
 WHATSAPP_LINK = f"https://wa.me/{WHATSAPP_NUMERO}?text="
 
-# === PALAVRAS-CHAVE JURÍDICAS POR ÁREA ===
+# === PALAVRAS JURÍDICAS ===
 PALAVRAS_JURIDICAS = {
-    "Direito de Família": [
-        "divórcio", "separação", "casamento", "união estável", "pensão", "alimentos", "guarda", "filho",
-        "adoção", "herança", "inventário", "custódia", "partilha", "regime de bens", "pensão alimentícia"
-    ],
-    "Direito Trabalhista": [
-        "trabalho", "demitido", "justa causa", "reclamação", "emprego", "carteira", "horas extras", "acidente de trabalho",
-        "rescisão", "fgts", "aviso prévio", "13º", "férias", "salário", "verbas rescisórias"
-    ],
-    "Direito Previdenciário": [
-        "aposentadoria", "inss", "auxílio", "benefício", "bpc", "idoso", "doença", "invalidez", "revisão", "pedágio",
-        "tempo de contribuição", "auxílio-doença", "auxílio-acidente", "perícia", "afastamento", "loas", "deficiência"
-    ],
-    "Direito do Consumidor": [
-        "consumidor", "golpe", "cobrança", "dívida", "juros", "banco", "pix", "boleto", "procon", "contrato", "produto com defeito"
-    ],
-    "Indenização por Danos": [
-        "acidente", "indenização", "danos", "moral", "estético", "responsabilidade", "civil", "lesão", "erro médico"
-    ],
-    "Direito Imobiliário": [
-        "imóvel", "aluguel", "fiador", "despejo", "locação", "condomínio", "chave", "depósito", "reajuste"
-    ],
-    "Direito Penal": [
-        "prisão", "flagrante", "habeas", "corpus", "fiança", "crime", "polícia", "liberdade provisória"
-    ],
-    "Direito Empresarial": [
-        "mei", "eireli", "contrato social", "sociedade", "empresa", "simples nacional"
-    ],
-    "LGPD e Privacidade": [
-        "dados", "lgpd", "vazamento", "privacidade", "uso de imagem"
-    ],
-    "Geral": [
-        "lei", "direito", "advogado", "juiz", "justiça", "tribunal", "código civil", "constituição"
-    ]
+    "Direito de Família": ["divórcio", "guarda", "alimentos", "casamento", "adoção"],
+    "Direito Trabalhista": ["demitido", "justa causa", "horas extras", "fgts", "reclamação"],
+    "Direito Previdenciário": ["aposentadoria", "inss", "auxílio-doença", "bpc", "loas"],
+    "Direito do Consumidor": ["golpe", "pix", "cobrança", "procon", "juros abusivos"],
+    "Indenização": ["acidente", "danos", "moral", "erro médico"],
+    "Geral": ["lei", "direito", "advogado", "justiça"]
 }
 
-# === FUNÇÕES DE DETECÇÃO ===
-def eh_tema_juridico(pergunta: str) -> bool:
+def eh_tema_juridico(pergunta):
     p = pergunta.lower()
     return any(palavra in p for area in PALAVRAS_JURIDICAS.values() for palavra in area)
 
-def detectar_area(pergunta: str) -> str:
+def detectar_area(pergunta):
     p = pergunta.lower()
-    melhor_area = "Jurídico Geral"
+    melhor = "Jurídico Geral"
     max_count = 0
     for area, palavras in PALAVRAS_JURIDICAS.items():
         count = sum(1 for palavra in palavras if palavra in p)
         if count > max_count:
             max_count = count
-            melhor_area = area
-    return melhor_area
+            melhor = area
+    return melhor
 
-# === BOTÃO WHATSAPP ===
-def botao_whatsapp(texto: str, mensagem: str) -> str:
+def botao_whatsapp(texto, mensagem):
     msg = url_quote(mensagem)
-    return f'<a href="{WHATSAPP_LINK}{msg}" style="background:#1a3a6e; color:white; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; display:inline-block;">📞 {texto}</a>'
+    return f'<a href="{WHATSAPP_LINK}{msg}" style="background:#1a3a6e; color:white; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:bold; display:inline-block; margin-top:10px;">📞 {texto}</a>'
 
-# === CHAMADA À GROQ (LLAMA 3) ===
-def perguntar(pergunta: str) -> dict | None:
+def perguntar(pergunta):
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        logger.error("GROQ_API_KEY não configurada")
         return None
 
     headers = {
@@ -122,15 +91,12 @@ def chat():
 
     p = pergunta.lower()
 
-    # Saudações
     if any(w in p for w in ["oi", "olá", "bom dia"]):
         return jsonify({"resposta": f"Olá! Como posso te ajudar? 😊<br><br>{botao_whatsapp('📞 Falar agora', 'Quero falar com um advogado.')}"})
 
-    # Despedidas
     if any(w in p for w in ["tchau", "obrigado"]):
         return jsonify({"resposta": "Até logo! Conte com o Dr. Legal!"})
 
-    # Temas comuns
     temas = {
         "divórcio": "Temos especialistas em divórcio rápido.",
         "trabalho": "Podemos te ajudar com direitos trabalhistas.",
@@ -141,7 +107,6 @@ def chat():
             esp = detectar_area(pergunta)
             return jsonify({"resposta": f"{desc}<br><br>📌 <b>{esp}</b><br>{botao_whatsapp(f'📞 Falar com {esp}', f'Quero falar sobre {tema}.')}"})
 
-    # Usar IA se for tema jurídico
     if eh_tema_juridico(pergunta):
         resultado = perguntar(pergunta)
         if resultado:
@@ -151,7 +116,6 @@ def chat():
             esp = detectar_area(pergunta)
             return jsonify({"resposta": f"Vamos te encaminhar para um especialista em {esp}.<br>{botao_whatsapp('✅ Enviar caso', pergunta[:100])}"})
 
-    # Não jurídico
     return jsonify({"resposta": f"Isso é importante, mas meu foco é direito.<br><br>{botao_whatsapp('✅ Falar sobre direitos', 'Quero falar sobre um problema jurídico.')}"})
 
 # === INICIAR ===
